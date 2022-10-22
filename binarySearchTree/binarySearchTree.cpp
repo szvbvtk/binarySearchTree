@@ -72,30 +72,57 @@ struct BST {
     }
 
 
-    void inorderTraversal_h(Node<T>* n, std::string(*func)(T*)) {
+    void inorderTraversal_h(Node<T>* n, Node<T>** arr) {
         if (n != nullptr) {
-            inorderTraversal_h(n->left_child, func);
-            std::cout << '{' + func(&n->data) + "} ";
-            inorderTraversal_h(n->right_child, func);
+            inorderTraversal_h(n->left_child, arr);
+            arr[traversal_index++] = n;
+            inorderTraversal_h(n->right_child, arr);
         }
 
     }
 
-    void inorderTraversal(std::string(*func)(T*)) {
-        inorderTraversal_h(root, func);
-    }
+    std::string inorderTraversal(std::string(*func)(T*)) {
+        traversal_index = 0;
+        Node<T>** arr = new Node<T>*[size];
+        std::string s = "";
 
-    void preorderTraversal_h(Node<T>* n, std::string(*func)(T*)) {
-        if (n != nullptr) {
-            std::cout << '{' + func(&n->data) + "} ";
-            preorderTraversal_h(n->left_child, func);
-            preorderTraversal_h(n->right_child, func);
+        if (root == nullptr)
+            return "BST is empty.";
+
+        inorderTraversal_h(root, arr);
+
+        for (int i = 0; i < size; i++) {
+            s += '(' + func(&arr[i]->data) + ") ";
         }
 
+        delete[] arr;
+        return s;
     }
 
-    void preorderTraversal(std::string(*func)(T*)) {
-        preorderTraversal_h(root, func);
+    void preorderTraversal_h(Node<T>* n, Node<T>** arr) {
+        if (n != nullptr) {
+            arr[traversal_index++] = n;
+            preorderTraversal_h(n->left_child, arr);
+            preorderTraversal_h(n->right_child, arr);
+        }
+    }
+
+    std::string preorderTraversal(std::string(*func)(T*)) {
+        traversal_index = 0;
+        Node<T>** arr = new Node<T>*[size];
+        std::string s = "";
+
+        if (root == nullptr)
+            return "BST is empty.";
+
+        preorderTraversal_h(root, arr);
+
+        for (int i = 0; i < size; i++) {
+            s += '(' + func(&arr[i]->data) + ") ";
+        }
+
+        delete[] arr;
+        return s;
     }
 
     void clear_h(Node<T>* n) {
@@ -103,7 +130,7 @@ struct BST {
             clear_h(n->left_child);
             clear_h(n->right_child);
 
-            std::cout << "\n Deleting node: " << std::to_string(n->data.f1);
+            //std::cout << "\nUsuwam: " << std::to_string(n->data.f1) << '\n';
             if(n != nullptr)
                 delete n;
         }
@@ -112,15 +139,21 @@ struct BST {
     void clear() {
         clear_h(root);
         root = nullptr;
+        size = 0;
     }
 
     static int traversal_index;
     std::string str(std::string(*func)(T*)) {
         traversal_index = 0;
         Node<T>** arr = new Node<T>*[size];
-        std::string s = "Size: " + std::to_string(size) + "\nHeight: " + "\n{\n";
-        preorderToStr(root, arr);
+        std::string s = "Size: " + std::to_string(size) + "\nHeight: " + std::to_string(height_h(root)) + "\n{\n";
+        preorderTraversal_h(root, arr);
         
+        if (root == nullptr) {
+            s += "\n\tBST is empty\n\n}";
+            return s;
+        }
+
         for (int i = 0; i < size; i++) {
             //std::cout << "(" << arr[i].f1 << ' ' << arr[i].f2 << ")\n";
             s += "\t[ Node: (" + func(&arr[i]->data) + ')';
@@ -149,12 +182,22 @@ struct BST {
         return s;
     }
 
-    void preorderToStr(Node<T>* n, Node<T>** arr) {
-        if (n != nullptr) {
-            arr[traversal_index++] = n;
-            preorderToStr(n->left_child, arr);
-            preorderToStr(n->right_child, arr);
-        }
+    int height_h(Node<T>* n) {
+        if (n == nullptr)
+            return 0;
+
+        int lb_height = height_h(n->left_child);
+        int rb_height = height_h(n->right_child);
+
+        if (lb_height < rb_height)
+            return 1 + rb_height;
+        else
+            return 1 + lb_height;
+        //return lb_height + 1; sprawdzić gdyby nie działało
+    }
+
+    int height() {
+        return height_h(root);
     }
 
 };
@@ -186,23 +229,29 @@ int main()
     BST<simple_object>* bst = new BST<simple_object>();
     std::cout << bst->insert({ 1, 'j' }, simpleObjectComparator) << '\n';
     std::cout << bst->insert({ 1, 'd' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 4, 'c' }, simpleObjectComparator) << '\n';
     std::cout << bst->insert({ 5, 'p' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 4, 'c' }, simpleObjectComparator) << '\n';
     std::cout << bst->insert({ 3, 't' }, simpleObjectComparator) << '\n';
     std::cout << bst->insert({ 3, 'f' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 0, 'f' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 2, 'f' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 7, 's' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 8, 's' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 9, 's' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 10, 's' }, simpleObjectComparator) << '\n';
     Node<simple_object>* n1 = bst->search({ 4, 'n' }, simpleObjectComparator);
     //std::cout << n1->parent->data.f1;
     //bool y = (bst->root->parent == nullptr);
     //std::cout << "Czy nullptr " << y;
     std::cout << "\n---------\n";
-
-    //std::cout << "\n\n\n\n";
-    //bst->inorderTraversal(str);
-    //std::cout << '\n';
-    //bst->preorderTraversal(str);
     //bst->clear();
+    std::cout << "In-order walk" << bst->inorderTraversal(str) << '\n';
+    std::cout << "Pre-order walk" << bst->preorderTraversal(str) << '\n';
+
     //std::cout << '\n' << bst->root << '\n';
     std::cout << bst->str(str);
+
+    std::cout << "\n" << bst->height();
     delete bst;
 }
 
