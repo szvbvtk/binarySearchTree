@@ -125,24 +125,38 @@ struct BST {
         return s;
     }
 
-    void clear_h(Node<T>* n) {
-        if (n != nullptr) {
-            clear_h(n->left_child);
-            clear_h(n->right_child);
+    //void clear_h(Node<T>* n) {
+    //    if (n != nullptr) {
+    //        clear_h(n->left_child);
+    //        clear_h(n->right_child);
 
-            //std::cout << "\nUsuwam: " << std::to_string(n->data.f1) << '\n';
-            if(n != nullptr)
-                delete n;
-        }
-    }
+    //        if(n != nullptr)
+    //            delete n;
+    //    }
+    //}
 
-    void clear() {
-        clear_h(root);
-        root = nullptr;
-        size = 0;
-    }
+    //void clear() {
+    //    clear_h(root);
+    //    root = nullptr;
+    //    size = 0;
+    //}
 
     static int traversal_index;
+    void clear() {
+        traversal_index = 0;
+        Node<T>** arr = new Node<T>*[size];
+        preorderTraversal_h(root, arr);
+
+        for (int i = 0; i < size; i++) {
+            Node<T>* p = arr[i];
+            delete p;
+        }
+
+        size = 0;
+        delete[] arr;
+        root = nullptr;
+    }
+
     std::string str(std::string(*func)(T*)) {
         traversal_index = 0;
         Node<T>** arr = new Node<T>*[size];
@@ -200,6 +214,105 @@ struct BST {
         return height_h(root);
     }
 
+    Node<T>* predecessor(Node<T> * n) {
+        Node<T>* tmp = nullptr;
+        if (n->left_child != nullptr)
+            n = n->left_child;
+
+        while (n != nullptr) {
+            tmp = n;
+            n = n->right_child;
+        }
+
+        return tmp;
+    }
+
+    Node<T>* successor(Node<T> * n) {
+        Node<T>* tmp = nullptr;
+        if (n->right_child != nullptr)
+            n = n->right_child;
+
+        while (n != nullptr) {
+            tmp = n;
+            n = n->left_child;
+        }
+
+        return tmp;
+    }
+
+    void remove(Node<T>* n) {
+        if (n->left_child == nullptr && n->right_child == nullptr) {
+            if (root == n)
+                root = nullptr;
+
+            if (n->parent != nullptr)
+                if (n->parent->left_child == n)
+                    n->parent->left_child = nullptr;
+                else if(n->parent->right_child == n)
+                    n->parent->right_child = nullptr;
+
+            size--;
+            delete n;
+        }
+        else if (n->left_child == nullptr && n->right_child != nullptr) {
+
+            if (n->parent != nullptr)
+            {
+                if (n->parent->left_child == n)
+                {
+                    n->parent->left_child = n->right_child;
+                    n->right_child->parent = n->parent;
+                }
+                else if (n->parent->right_child == n)
+                {
+                    n->parent->right_child = n->right_child;
+                    n->right_child->parent = n->parent;
+                }
+            }
+            else {
+                n->right_child->parent = nullptr;
+                if (root == n)
+                    root = n->right_child;
+            }
+            size--;
+            delete n;
+
+        }
+        else if (n->left_child != nullptr && n->right_child == nullptr) {
+
+
+            if (n->parent != nullptr)
+            {
+                if (n->parent->left_child == n)
+                {
+                    n->parent->left_child = n->left_child;
+                    n->left_child->parent = n->parent;
+                }
+                else if (n->parent->right_child == n)
+                {
+                    n->parent->right_child = n->left_child;
+                    n->left_child->parent = n->parent;
+                }
+            }
+            else {
+                n->left_child->parent = nullptr;
+                if (root == n)
+                    root = n->left_child;
+            }
+            size--;
+            delete n;
+
+        }
+        else if(n->left_child != nullptr && n->right_child != nullptr) {
+            Node<T>* n_successor = successor(n);
+            if (n_successor != nullptr)
+            {
+                n->data = n_successor->data;
+                remove(n_successor);
+            }
+        }
+    }
+
 };
 
 template <typename T>
@@ -226,23 +339,54 @@ int simpleObjectComparator(simple_object* o1, simple_object* o2) {
 
 int main()
 {
+
     BST<simple_object>* bst = new BST<simple_object>();
-    std::cout << bst->insert({ 1, 'j' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 1, 'd' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 5, 'p' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 4, 'c' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 3, 't' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 3, 'f' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 0, 'f' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 2, 'f' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 7, 's' }, simpleObjectComparator) << '\n';
-    //std::cout << bst->insert({ 8, 's' }, simpleObjectComparator) << '\n';
-    //std::cout << bst->insert({ 9, 's' }, simpleObjectComparator) << '\n';
-    //std::cout << bst->insert({ 10, 's' }, simpleObjectComparator) << '\n';
-    Node<simple_object>* n1 = bst->search({ 4, 'n' }, simpleObjectComparator);
-    //std::cout << n1->parent->data.f1;
-    //bool y = (bst->root->parent == nullptr);
-    //std::cout << "Czy nullptr " << y;
+
+    // BST 1 TEST
+    //std::cout << bst->insert({ 1, 'j' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 1, 'd' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 5, 'p' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 4, 'c' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 3, 't' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 3, 'f' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 0, 'f' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 2, 'f' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 7, 's' }, simpleObjectComparator) << '\n';
+
+
+    //BST 2 TEST
+    //std::cout << bst->insert({ 13, 't' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 5, 'k' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 2, 'l' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 1, 'p' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 0, 'o' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 4, 'q' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 60, 'w' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 21, 'r' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 15, 'e' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 30, 'd' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 70, 'x' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 75, 'z' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 72, 'c' }, simpleObjectComparator) << '\n';
+
+    // BST 3 TEST
+    std::cout << bst->insert({ 13, 't' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 5, 'k' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 2, 'l' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 1, 'p' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 0, 'o' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 4, 'q' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 60, 'w' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 21, 'r' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 15, 'e' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 30, 'd' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 70, 'x' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 75, 'z' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 72, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 68, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 76, 'c' }, simpleObjectComparator) << '\n';
+
+
     std::cout << "\n---------\n";
     //bst->clear();
     std::cout << "In-order walk" << bst->inorderTraversal(str) << '\n';
@@ -251,7 +395,12 @@ int main()
     //std::cout << '\n' << bst->root << '\n';
     std::cout << bst->str(str);
 
-    std::cout << "\n" << bst->height();
+    //std::cout << "\n" << bst->height();
+    Node<simple_object>* n1 = bst->search({ 13, 's' }, simpleObjectComparator);
+    bst->remove(n1);
+    std::cout << '\n' << bst->str(str);
+    std::cout << "\nIn-order walk" << bst->inorderTraversal(str) << '\n';
+    //std::cout << '\n' << std::to_string(bst->successor(bst->root)->data.f1);
     delete bst;
 }
 
