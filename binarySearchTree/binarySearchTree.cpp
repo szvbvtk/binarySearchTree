@@ -370,22 +370,48 @@ int main()
     //std::cout << bst->insert({ 72, 'c' }, simpleObjectComparator) << '\n';
 
     // BST 3 TEST
-    std::cout << bst->insert({ 13, 't' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 5, 'k' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 2, 'l' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 1, 'p' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 0, 'o' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 4, 'q' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 60, 'w' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 21, 'r' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 15, 'e' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 30, 'd' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 70, 'x' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 75, 'z' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 72, 'c' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 68, 'c' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 76, 'c' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 13, 't' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 5, 'k' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 2, 'l' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 1, 'p' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 0, 'o' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 4, 'q' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 60, 'w' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 21, 'r' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 15, 'e' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 30, 'd' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 70, 'x' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 75, 'z' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 72, 'c' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 68, 'c' }, simpleObjectComparator) << '\n';
+    //std::cout << bst->insert({ 76, 'c' }, simpleObjectComparator) << '\n';
 
+
+    // BST 4
+    std::cout << bst->insert({ 10, 't' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 200, 'k' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 100, 'l' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 90, 'p' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 150, 'o' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 120, 'q' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 160, 'w' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 250, 'r' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 210, 'e' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 300, 'd' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 290, 'x' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 400, 'z' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 5, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 3, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 2, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 1, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 4, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 298, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 291, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 299, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 350, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 405, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 401, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 406, 'c' }, simpleObjectComparator) << '\n';
 
     std::cout << "\n---------\n";
     //bst->clear();
@@ -396,7 +422,8 @@ int main()
     std::cout << bst->str(str);
 
     //std::cout << "\n" << bst->height();
-    Node<simple_object>* n1 = bst->search({ 13, 's' }, simpleObjectComparator);
+    Node<simple_object>* n1 = bst->search({ 250, 's' }, simpleObjectComparator);
+    Node<simple_object>* n2 = bst->search({ 250, 's' }, simpleObjectComparator);
     bst->remove(n1);
     std::cout << '\n' << bst->str(str);
     std::cout << "\nIn-order walk" << bst->inorderTraversal(str) << '\n';
