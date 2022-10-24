@@ -409,9 +409,9 @@ int main()
     std::cout << bst->insert({ 291, 'c' }, simpleObjectComparator) << '\n';
     std::cout << bst->insert({ 299, 'c' }, simpleObjectComparator) << '\n';
     std::cout << bst->insert({ 350, 'c' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 405, 'c' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 401, 'c' }, simpleObjectComparator) << '\n';
-    std::cout << bst->insert({ 406, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 288, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 287, 'c' }, simpleObjectComparator) << '\n';
+    std::cout << bst->insert({ 289, 'c' }, simpleObjectComparator) << '\n';
 
     std::cout << "\n---------\n";
     //bst->clear();
@@ -423,7 +423,6 @@ int main()
 
     //std::cout << "\n" << bst->height();
     Node<simple_object>* n1 = bst->search({ 250, 's' }, simpleObjectComparator);
-    Node<simple_object>* n2 = bst->search({ 250, 's' }, simpleObjectComparator);
     bst->remove(n1);
     std::cout << '\n' << bst->str(str);
     std::cout << "\nIn-order walk" << bst->inorderTraversal(str) << '\n';
